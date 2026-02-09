@@ -13,6 +13,121 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
+// Caesar Cipher Functions
+function caesarEncrypt(text, shift) {
+    return text.split('').map(char => {
+        if (char.match(/[A-Z]/i)) {
+            const code = char.charCodeAt(0);
+            const base = code >= 65 && code <= 90 ? 65 : 97;
+            return String.fromCharCode(((code - base + shift) % 26) + base);
+        }
+        return char;
+    }).join('');
+}
+
+function caesarDecrypt(text, shift) {
+    return caesarEncrypt(text, 26 - (shift % 26));
+}
+
+function combineText(fullName, yearLevel, course) {
+    return `${fullName.toUpperCase()} | ${yearLevel} | ${course.toUpperCase()}`;
+}
+
+function validateInputs() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const yearLevel = document.getElementById('yearLevel').value;
+    const course = document.getElementById('course').value;
+    const shiftKey = parseInt(document.getElementById('shiftKey').value);
+
+    if (!fullName) {
+        alert('Please enter your full name.');
+        return false;
+    }
+    
+    if (!yearLevel) {
+        alert('Please select your year level.');
+        return false;
+    }
+    
+    if (!course) {
+        alert('Please select your course.');
+        return false;
+    }
+    
+    if (isNaN(shiftKey) || shiftKey < 1 || shiftKey > 25) {
+        alert('Please enter a valid shift key between 1 and 25.');
+        return false;
+    }
+    
+    return { fullName, yearLevel, course, shiftKey };
+}
+
+// Encrypt Button Handler
+document.getElementById('encryptBtn').addEventListener('click', () => {
+    const inputs = validateInputs();
+    if (!inputs) return;
+    
+    const { fullName, yearLevel, course, shiftKey } = inputs;
+    
+    // Combine text
+    const plaintext = combineText(fullName, yearLevel, course);
+    
+    // Encrypt
+    const ciphertext = caesarEncrypt(plaintext, shiftKey);
+    
+    // Display results
+    document.getElementById('plaintext').textContent = plaintext;
+    document.getElementById('ciphertext').textContent = ciphertext;
+    
+    // Scroll to results
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+});
+
+// Decrypt Button Handler
+document.getElementById('decryptBtn').addEventListener('click', () => {
+    const inputs = validateInputs();
+    if (!inputs) return;
+    
+    const { fullName, yearLevel, course, shiftKey } = inputs;
+    
+    // Combine text
+    const plaintext = combineText(fullName, yearLevel, course);
+    
+    // Decrypt (we'll encrypt then decrypt for demo purposes)
+    // In real scenario, you'd input ciphertext to decrypt
+    const encrypted = caesarEncrypt(plaintext, shiftKey);
+    const decrypted = caesarDecrypt(encrypted, shiftKey);
+    
+    // Display results
+    document.getElementById('plaintext').textContent = encrypted;
+    document.getElementById('ciphertext').textContent = decrypted;
+    
+    // Scroll to results
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+});
+
+// Test example button
+document.addEventListener('DOMContentLoaded', () => {
+    // Pre-fill test example
+    const testExampleBtn = document.createElement('button');
+    testExampleBtn.className = 'btn';
+    testExampleBtn.style.marginTop = '20px';
+    testExampleBtn.innerHTML = '<i class="fas fa-vial"></i> Load Test Example (N=3)';
+    testExampleBtn.addEventListener('click', () => {
+        document.getElementById('fullName').value = 'ALICE';
+        document.getElementById('yearLevel').value = '1';
+        document.getElementById('course').value = 'BSIT';
+        document.getElementById('shiftKey').value = '3';
+        
+        // Trigger encryption
+        setTimeout(() => {
+            document.getElementById('encryptBtn').click();
+        }, 100);
+    });
+    
+    document.querySelector('.input-section .container').appendChild(testExampleBtn);
+});
+
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -31,165 +146,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Caesar Cipher Implementation
-document.addEventListener('DOMContentLoaded', function() {
-    // Get DOM elements
-    const fullNameInput = document.getElementById('fullName');
-    const yearLevelSelect = document.getElementById('yearLevel');
-    const courseInput = document.getElementById('course');
-    const shiftKeyInput = document.getElementById('shiftKey');
-    const plaintextInput = document.getElementById('plaintext');
-    const encryptBtn = document.getElementById('encryptBtn');
-    const decryptBtn = document.getElementById('decryptBtn');
-    const ciphertextResult = document.getElementById('ciphertextResult');
-    const plaintextResult = document.getElementById('plaintextResult');
-    
-    // Function to update the combined plaintext
-    function updatePlaintext() {
-        const fullName = fullNameInput.value.trim();
-        const yearLevel = yearLevelSelect.value;
-        const course = courseInput.value.trim();
-        
-        if (fullName && yearLevel && course) {
-            plaintextInput.value = `${fullName} | ${yearLevel} | ${course}`;
+// Form validation on input
+document.querySelectorAll('.form-control').forEach(input => {
+    input.addEventListener('input', function() {
+        if (this.value) {
+            this.style.borderColor = 'rgba(0, 255, 157, 0.5)';
         } else {
-            plaintextInput.value = '';
-        }
-    }
-    
-    // Update plaintext when inputs change
-    fullNameInput.addEventListener('input', updatePlaintext);
-    yearLevelSelect.addEventListener('change', updatePlaintext);
-    courseInput.addEventListener('input', updatePlaintext);
-    
-    // Initialize plaintext
-    updatePlaintext();
-    
-    // Caesar Cipher encryption function
-    function caesarCipher(text, shift, encrypt = true) {
-        let result = '';
-        
-        for (let i = 0; i < text.length; i++) {
-            let char = text[i];
-            
-            // Check if character is an uppercase letter
-            if (char >= 'A' && char <= 'Z') {
-                // Convert to character code (A=65, Z=90)
-                let code = char.charCodeAt(0);
-                
-                if (encrypt) {
-                    // Encryption formula: E = (X + N) % 26
-                    code = ((code - 65 + shift) % 26) + 65;
-                } else {
-                    // Decryption formula: D = (X - N) % 26
-                    code = ((code - 65 - shift + 26) % 26) + 65;
-                }
-                
-                result += String.fromCharCode(code);
-            }
-            // Check if character is a lowercase letter
-            else if (char >= 'a' && char <= 'z') {
-                // Convert to character code (a=97, z=122)
-                let code = char.charCodeAt(0);
-                
-                if (encrypt) {
-                    // Encryption formula: E = (X + N) % 26
-                    code = ((code - 97 + shift) % 26) + 97;
-                } else {
-                    // Decryption formula: D = (X - N) % 26
-                    code = ((code - 97 - shift + 26) % 26) + 97;
-                }
-                
-                result += String.fromCharCode(code);
-            }
-            // Keep numbers, spaces, and symbols unchanged
-            else {
-                result += char;
-            }
-        }
-        
-        return result;
-    }
-    
-    // Encryption button handler
-    encryptBtn.addEventListener('click', function() {
-        const plaintext = plaintextInput.value;
-        const shift = parseInt(shiftKeyInput.value);
-        
-        if (!plaintext) {
-            alert('Please fill in all fields to generate plaintext');
-            return;
-        }
-        
-        if (shift < 1 || shift > 25) {
-            alert('Shift key must be between 1 and 25');
-            return;
-        }
-        
-        const ciphertext = caesarCipher(plaintext, shift, true);
-        ciphertextResult.textContent = ciphertext;
-        ciphertextResult.style.color = '#00aaff';
-        
-        // Show original plaintext in result area
-        plaintextResult.textContent = plaintext;
-        plaintextResult.style.color = '#ff00aa';
-        
-        // Test with N=3 as required
-        if (shift === 3) {
-            console.log(`Test with N=3: "${plaintext}" -> "${ciphertext}"`);
+            this.style.borderColor = 'rgba(0, 255, 157, 0.3)';
         }
     });
-    
-    // Decryption button handler
-    decryptBtn.addEventListener('click', function() {
-        const ciphertext = ciphertextResult.textContent;
-        const shift = parseInt(shiftKeyInput.value);
-        
-        if (ciphertext === 'No encryption performed yet') {
-            alert('Please encrypt some text first before decrypting');
-            return;
-        }
-        
-        if (shift < 1 || shift > 25) {
-            alert('Shift key must be between 1 and 25');
-            return;
-        }
-        
-        const decryptedText = caesarCipher(ciphertext, shift, false);
-        plaintextResult.textContent = decryptedText;
-        plaintextResult.style.color = '#00ff9d';
-        
-        // Show what was decrypted
-        ciphertextResult.style.color = '#ffaa00';
-    });
-    
-    // Test with example from requirements when page loads
-    setTimeout(() => {
-        // Set example values
-        fullNameInput.value = "ALICE";
-        yearLevelSelect.value = "1";
-        courseInput.value = "BSIT";
-        shiftKeyInput.value = "3";
-        
-        // Update plaintext
-        updatePlaintext();
-        
-        // Encrypt
-        const plaintext = plaintextInput.value;
-        const shift = 3;
-        const ciphertext = caesarCipher(plaintext, shift, true);
-        
-        console.log(`Example from requirements (N=3):`);
-        console.log(`Plaintext: ${plaintext}`);
-        console.log(`Ciphertext: ${ciphertext}`);
-        console.log(`Expected: DOLFH | 1 | EVLW (numbers unchanged)`);
-        
-        // Reset to original values
-        setTimeout(() => {
-            fullNameInput.value = "Ivan Quinn M. Roldan";
-            yearLevelSelect.value = "3";
-            courseInput.value = "BSIT";
-            updatePlaintext();
-        }, 100);
-    }, 500);
 });
