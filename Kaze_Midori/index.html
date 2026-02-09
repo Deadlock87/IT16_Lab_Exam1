@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher Lab Exam | Ivan Quinn M. Roldan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">Caesar<span>Cipher</span></a>
+                <div class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#cipher">Caesar Cipher</a></li>
+                    <li><a href="#about">About Me</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="tagline">IT16 Lab Exam - Caesar Cipher</p>
+                <h1>Welcome to <span class="highlight">Caesar Cipher</span> Encryptor</h1>
+                <p>This web application implements the Caesar Cipher encryption and decryption algorithm as specified in the lab exam requirements. Enter your details and a shift value to see how encryption works!</p>
+                <a href="#cipher" class="btn">Try Caesar Cipher</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Caesar Cipher Section -->
+    <section id="cipher" class="cipher">
+        <div class="container">
+            <div class="section-title">
+                <h2>Caesar Cipher</h2>
+            </div>
+            
+            <div class="cipher-container">
+                <h3 style="color: var(--neon-green); margin-bottom: 30px; text-align: center;">Enter Your Details</h3>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="input-group">
+                            <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="fullName" placeholder="Enter your full name" value="Ivan Quinn M. Roldan">
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <div class="input-group">
+                            <label for="yearLevel"><i class="fas fa-graduation-cap"></i> Year Level</label>
+                            <select id="yearLevel">
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3" selected>3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="input-group">
+                            <label for="course"><i class="fas fa-book"></i> Course</label>
+                            <input type="text" id="course" placeholder="Enter your course" value="BSIT">
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <div class="input-group">
+                            <label for="shiftKey"><i class="fas fa-key"></i> Shift Key (1-25)</label>
+                            <input type="number" id="shiftKey" min="1" max="25" value="3">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="plaintext"><i class="fas fa-font"></i> Combined Plaintext (Format: NAME | YEAR | COURSE)</label>
+                    <input type="text" id="plaintext" readonly>
+                </div>
+                
+                <div class="button-group">
+                    <button id="encryptBtn" class="btn btn-encrypt">
+                        <i class="fas fa-lock"></i> Encrypt
+                    </button>
+                    <button id="decryptBtn" class="btn btn-decrypt">
+                        <i class="fas fa-unlock"></i> Decrypt
+                    </button>
+                </div>
+                
+                <div class="result-container">
+                    <h3 class="result-title"><i class="fas fa-shield-alt"></i> Ciphertext (Encrypted Result)</h3>
+                    <div id="ciphertextResult" class="result-box">No encryption performed yet</div>
+                    <div class="result-label">This is the encrypted text using Caesar Cipher</div>
+                </div>
+                
+                <div class="result-container" style="margin-top: 25px;">
+                    <h3 class="result-title"><i class="fas fa-file-alt"></i> Plaintext (Decrypted Result)</h3>
+                    <div id="plaintextResult" class="result-box">No decryption performed yet</div>
+                    <div class="result-label">This should match the original combined text when decrypted</div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3><i class="fas fa-info-circle"></i> How Caesar Cipher Works</h3>
+                <p>The Caesar Cipher is a substitution cipher where each letter in the plaintext is shifted a certain number of places down or up the alphabet. For encryption, each letter is shifted forward by N positions (E = (X + N) % 26). For decryption, each letter is shifted backward by N positions (D = (X - N) % 26). Numbers, spaces, and symbols remain unchanged. This creates a simple but effective encryption method that Julius Caesar reportedly used for military communications.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Me</h2>
+            </div>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <h3 style="color: var(--neon-green); margin-bottom: 20px;">Ivan Quinn M. Roldan</h3>
+                <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 20px;">
+                    I'm a 21-year-old BSIT student from Gravahan, Davao with a passion for technology, gaming, and problem-solving. This Caesar Cipher application demonstrates my understanding of fundamental encryption algorithms and web development skills.
+                </p>
+                <p style="color: var(--gray); font-size: 1.1rem;">
+                    This lab exam solution follows the requirements: it accepts user inputs, combines them in the specified format, encrypts/decrypts using the Caesar Cipher algorithm with configurable shift key, and displays both ciphertext and plaintext results. All code is implemented using pure HTML, CSS, and JavaScript without external frameworks.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-codepen"></i></a>
+            </div>
+            <p class="copyright">&copy; 2023 Caesar Cipher Lab Exam. All rights reserved.</p>
+            <p class="copyright">IT16 - Data Structures and Algorithms</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
